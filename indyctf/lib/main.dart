@@ -16,7 +16,7 @@ class CTFApp extends StatelessWidget {
       title: 'INDY CTF',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF050505),
-        primaryColor: const Color.fromARGB(255, 105, 255, 68),
+        primaryColor: Colors.lightGreenAccent,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(fontFamily: "Courier"),
           bodyLarge: TextStyle(fontFamily: "Courier"),
@@ -35,25 +35,23 @@ class CTFHomePage extends StatefulWidget {
   State<CTFHomePage> createState() => _CTFHomePageState();
 }
 
-class _CTFHomePageState extends State<CTFHomePage>
-    with SingleTickerProviderStateMixin {
-  late Timer _rainTimer;
-  final Random _rng = Random();
-
-  List<String> codeRain = List.generate(80, (_) => "");
+class _CTFHomePageState extends State<CTFHomePage> {
+  late Timer _timer;
+  final rng = Random();
+  List<String> lines = List.generate(40, (_) => "");
 
   @override
   void initState() {
     super.initState();
 
-    // ANIMATED BACKGROUND CODE RAIN
-    _rainTimer = Timer.periodic(const Duration(milliseconds: 90), (_) {
+    _timer = Timer.periodic(const Duration(milliseconds: 70), (_) {
       setState(() {
-        for (int i = 0; i < codeRain.length; i++) {
-          codeRain[i] += _randomChar();
+        for (int i = 0; i < lines.length; i++) {
+          lines[i] += _randomChar();
 
-          if (codeRain[i].length > 120) {
-            codeRain[i] = codeRain[i].substring(40);
+          // Smooth looping effect
+          if (lines[i].length > 220) {
+            lines[i] = lines[i].substring(1);
           }
         }
       });
@@ -61,149 +59,144 @@ class _CTFHomePageState extends State<CTFHomePage>
   }
 
   String _randomChar() {
-    const chars = "01{}<>/\\|#%&@*+=-[]\$";
-    return chars[_rng.nextInt(chars.length)];
+    const chars = "01<>/\\|#%&@+=-[]{}*";
+    return chars[rng.nextInt(chars.length)];
   }
 
   @override
   void dispose() {
-    _rainTimer.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
-  // TOP HEADER PANEL
+  // HEADER
   Widget buildHeader() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           "INDY CTF",
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 40,
+            fontSize: 45,
             fontWeight: FontWeight.bold,
-            color: Colors.lightGreenAccent.withOpacity(0.9),
-            letterSpacing: 2,
+            color: Colors.lightGreenAccent.withOpacity(0.95),
+            letterSpacing: 3,
           ),
         ),
-        const SizedBox(height: 6),
-        Text(
+        const SizedBox(height: 10),
+        const Text(
           "Real-world cybersecurity challenges for all skill levels.",
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white70,
-          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 17, color: Colors.white70),
         ),
-        const SizedBox(height: 16),
-        Row(
+        const SizedBox(height: 20),
+
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 12,
+          runSpacing: 8,
           children: [
             infoChip("LOCATION", "US-EAST-01"),
-            const SizedBox(width: 10),
             infoChip("STATUS", "ACTIVE"),
-            const SizedBox(width: 10),
             infoChip("DATE", DateTime.now().toString().substring(0, 16)),
           ],
         ),
-        const SizedBox(height: 40),
+
+        const SizedBox(height: 50),
       ],
     );
   }
 
   Widget infoChip(String label, String value) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.lightGreenAccent.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(6),
+        color: Colors.lightGreenAccent.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.lightGreenAccent.withOpacity(0.4)),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "$label: ",
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.lightGreenAccent),
-          ),
-          Text(
-            value,
-            style: const TextStyle(color: Colors.white70),
-          ),
+          Text("$label: ",
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightGreenAccent)),
+          Text(value, style: const TextStyle(color: Colors.white70)),
         ],
       ),
     );
   }
 
-  // MAIN UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          AnimatedBackground(codeRain: codeRain),
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-              ],
-            ),
-          ),
+          AnimatedCodeBackground(lines: lines),
 
           SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildHeader(),
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 700),
+                child: Column(
+                  children: [
+                    buildHeader(),
 
-                const CTFSection(
-                  title: "About",
-                  subtitle: "What this event is and why it exists.",
-                  body:
-                      "Welcome to INDY CTF — a real-world challenge environment "
-                      "for cybersecurity enthusiasts, puzzle solvers, and digital infiltrators.",
+                    const HoverCard(
+                      title: "ABOUT",
+                      subtitle: "What this event is.",
+                      body:
+                          "INDY CTF is a training ground for hackers—cryptography, logic puzzles, "
+                          "network infiltration, and more.",
+                    ),
+
+                    const HoverCard(
+                      title: "CHALLENGES",
+                      subtitle: "What you will face.",
+                      body:
+                          "Reverse engineering, forensics, binary exploitation, cryptography, web, "
+                          "and OSINT challenges of various difficulty.",
+                    ),
+
+                    const HoverCard(
+                      title: "RULES & JUDGING",
+                      subtitle: "How points work.",
+                      body:
+                          "Submit flags on a secure platform. Score scales by difficulty & solve time. "
+                          "Leaderboard updates live.",
+                    ),
+
+                    const HoverCard(
+                      title: "WHY JOIN?",
+                      subtitle: "The benefits.",
+                      body:
+                          "Sharpen your skills, join a community, build a portfolio, and challenge "
+                          "your abilities under pressure.",
+                    ),
+
+                    const HoverCard(
+                      title: "FAQ",
+                      subtitle: "Common questions.",
+                      body:
+                          "• Experience required? No.\n"
+                          "• Cost? Free.\n"
+                          "• Solo players? Allowed.\n",
+                    ),
+
+                    const HoverCard(
+                      title: "SPONSORS",
+                      subtitle: "Who supports this.",
+                      body:
+                          "Supported by tech orgs, local companies, cybersecurity groups, and universities.",
+                    ),
+
+                    const SizedBox(height: 120),
+                  ],
                 ),
-
-                const CTFSection(
-                  title: "Challenges",
-                  subtitle: "Categories & difficulty ranges.",
-                  body:
-                      "Includes cryptography, reverse engineering, forensics, "
-                      "binary exploitation, web attacks, OSINT, and more.",
-                ),
-
-                const CTFSection(
-                  title: "Judging & Rules",
-                  subtitle: "How scoring works.",
-                  body:
-                      "Flags are submitted through a secure platform. Scoring is determined by "
-                      "challenge difficulty and solve time, with a live leaderboard.",
-                ),
-
-                const CTFSection(
-                  title: "Why Join",
-                  subtitle: "What you get out of the event.",
-                  body:
-                      "Sharpen your skills, meet new people, build your resume, and challenge your limits.",
-                ),
-
-                const CTFSection(
-                  title: "FAQs",
-                  subtitle: "Common participant questions.",
-                  body:
-                      "• Experience needed? No, beginners welcome.\n"
-                      "• Cost? Free.\n"
-                      "• Solo players? Yes.",
-                ),
-
-                const CTFSection(
-                  title: "Sponsors",
-                  subtitle: "Organizations that made this possible.",
-                  body:
-                      "Supported by local tech companies, cybersecurity orgs, and universities.",
-                ),
-
-                const SizedBox(height: 100),
-              ],
+              ),
             ),
           ),
         ],
@@ -212,24 +205,27 @@ class _CTFHomePageState extends State<CTFHomePage>
   }
 }
 
-class AnimatedBackground extends StatelessWidget {
-  final List<String> codeRain;
+// -----------------------------------------------------------------------------
+//  ANIMATED BACKGROUND (CLEAN LOOP)
+// -----------------------------------------------------------------------------
+class AnimatedCodeBackground extends StatelessWidget {
+  final List<String> lines;
 
-  const AnimatedBackground({super.key, required this.codeRain});
+  const AnimatedCodeBackground({super.key, required this.lines});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // MOVING GRADIENT GLOW
+        // Subtle glowing gradient
         AnimatedContainer(
           duration: const Duration(seconds: 6),
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFF001020),
+                Color(0xFF001418),
                 Color(0xFF000000),
-                Color(0xFF001830),
+                Color(0xFF001820),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -237,22 +233,22 @@ class AnimatedBackground extends StatelessWidget {
           ),
         ),
 
-        // CODE RAIN LAYER
+        // Scrolling lines
         Positioned.fill(
           child: Opacity(
-            opacity: 0.05,
+            opacity: 0.08,
             child: Column(
-              children: codeRain
+              children: lines
                   .map(
-                    (str) => Text(
-                      str,
+                    (line) => Text(
+                      line,
                       maxLines: 1,
                       overflow: TextOverflow.clip,
                       style: const TextStyle(
+                        fontSize: 13,
+                        height: 1,
                         color: Colors.greenAccent,
-                        fontSize: 14,
-                        height: 1.1,
-                        fontFamily: 'Courier',
+                        fontFamily: "Courier",
                       ),
                     ),
                   )
@@ -261,7 +257,7 @@ class AnimatedBackground extends StatelessWidget {
           ),
         ),
 
-        // SCANLINE OVERLAY
+        // Scanline overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -269,9 +265,9 @@ class AnimatedBackground extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.white.withOpacity(0.01),
+                  Colors.white.withOpacity(0.02),
                   Colors.transparent,
-                  Colors.white.withOpacity(0.01),
+                  Colors.white.withOpacity(0.02),
                 ],
                 stops: const [0.0, 0.5, 1.0],
                 tileMode: TileMode.repeated,
@@ -284,12 +280,15 @@ class AnimatedBackground extends StatelessWidget {
   }
 }
 
-class CTFSection extends StatelessWidget {
+// -----------------------------------------------------------------------------
+//  HOVER-SCALE PROFESSIONAL CARD
+// -----------------------------------------------------------------------------
+class HoverCard extends StatefulWidget {
   final String title;
   final String subtitle;
   final String body;
 
-  const CTFSection({
+  const HoverCard({
     super.key,
     required this.title,
     required this.subtitle,
@@ -297,56 +296,79 @@ class CTFSection extends StatelessWidget {
   });
 
   @override
+  State<HoverCard> createState() => _HoverCardState();
+}
+
+class _HoverCardState extends State<HoverCard> {
+  bool hovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-      margin: const EdgeInsets.only(bottom: 35),
-      padding: const EdgeInsets.all(18),
+    return MouseRegion(
+      onEnter: (_) => setState(() => hovering = true),
+      onExit: (_) => setState(() => hovering = false),
+      cursor: SystemMouseCursors.click,
+      child: AnimatedScale(
+        scale: hovering ? 1.03 : 1.0,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
 
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.lightGreenAccent.withOpacity(0.3)),
-        color: Colors.black.withOpacity(0.25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.lightGreenAccent.withOpacity(0.12),
-            blurRadius: 12,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.all(22),
 
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: Colors.lightGreenAccent,
-              letterSpacing: 1.2,
-            ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+                color: hovering
+                    ? Colors.lightGreenAccent
+                    : Colors.lightGreenAccent.withOpacity(0.3)),
+            color: Colors.black.withOpacity(0.28),
+            boxShadow: hovering
+                ? [
+                    BoxShadow(
+                      color: Colors.lightGreenAccent.withOpacity(0.32),
+                      blurRadius: 25,
+                      spreadRadius: 2,
+                    )
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.lightGreenAccent.withOpacity(0.1),
+                      blurRadius: 12,
+                    )
+                  ],
           ),
-          const SizedBox(height: 5),
-          Text(
-            subtitle,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                widget.title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  color: Colors.lightGreenAccent,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                widget.subtitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white70, fontSize: 15),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                widget.body,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white70, fontSize: 16),
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          Text(
-            body,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 15,
-              height: 1.5,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
