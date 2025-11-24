@@ -49,7 +49,6 @@ class _CTFHomePageState extends State<CTFHomePage> {
         for (int i = 0; i < lines.length; i++) {
           lines[i] += _randomChar();
 
-          // Smooth looping effect
           if (lines[i].length > 220) {
             lines[i] = lines[i].substring(1);
           }
@@ -205,9 +204,6 @@ class _CTFHomePageState extends State<CTFHomePage> {
   }
 }
 
-// -----------------------------------------------------------------------------
-//  ANIMATED BACKGROUND (CLEAN LOOP)
-// -----------------------------------------------------------------------------
 class AnimatedCodeBackground extends StatelessWidget {
   final List<String> lines;
 
@@ -217,7 +213,6 @@ class AnimatedCodeBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Subtle glowing gradient
         AnimatedContainer(
           duration: const Duration(seconds: 6),
           decoration: const BoxDecoration(
@@ -233,7 +228,6 @@ class AnimatedCodeBackground extends StatelessWidget {
           ),
         ),
 
-        // Scrolling lines
         Positioned.fill(
           child: Opacity(
             opacity: 0.08,
@@ -257,7 +251,6 @@ class AnimatedCodeBackground extends StatelessWidget {
           ),
         ),
 
-        // Scanline overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -280,9 +273,6 @@ class AnimatedCodeBackground extends StatelessWidget {
   }
 }
 
-// -----------------------------------------------------------------------------
-//  HOVER-SCALE PROFESSIONAL CARD
-// -----------------------------------------------------------------------------
 class HoverCard extends StatefulWidget {
   final String title;
   final String subtitle;
