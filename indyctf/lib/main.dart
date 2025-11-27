@@ -73,14 +73,16 @@ class _CTFHomePageState extends State<CTFHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          "INDY CTF",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-            color: Colors.lightGreenAccent.withOpacity(0.95),
-            letterSpacing: 3,
+        Flicker(
+          child: Text(
+            "INDY CTF",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 45,
+              fontWeight: FontWeight.bold,
+              color: Colors.lightGreenAccent.withOpacity(0.95),
+              letterSpacing: 3,
+            ),
           ),
         ),
         const SizedBox(height: 10),
@@ -360,6 +362,47 @@ class _HoverCardState extends State<HoverCard> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Flicker extends StatefulWidget {
+  final Widget child;
+  const Flicker({super.key, required this.child});
+
+  @override
+  State<Flicker> createState() => _FlickerState();
+}
+
+class _FlickerState extends State<Flicker>
+    with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
+  late Animation<double> _flicker;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat();
+
+    _flicker = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 1),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 10),
+    ]).animate(_controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, child) {
+        return Opacity(opacity: _flicker.value, child: child);
+      },
+      child: widget.child,
     );
   }
 }
