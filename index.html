@@ -1,148 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
-  #idk what I am doing
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Indy CTF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #0e0e0e;
-      color: #fff;
+      font-family: Courier, monospace;
+      background: #050505;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    /* Background gradient */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom right, #001418, #000000, #001820);
+      z-index: -3;
+      animation: gradientShift 6s infinite alternate;
+    }
+    
+    @keyframes gradientShift {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.25); }
+    }
+    
+    /* Code rain lines */
+    .code-lines {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.08;
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+      line-height: 13px;
+      color: #00ff88;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    
+    /* Vertical shimmer overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.03),
+        transparent,
+        rgba(255,255,255,0.03)
+      );
+      background-size: 100% 250px;
+      animation: scan 8s linear infinite;
+    }
+    
+    @keyframes scan {
+      0% { background-position: 0 -250px; }
+      100% { background-position: 0 250px; }
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      padding-top: 50px;
+    }
+    
+    .flicker {
+      font-size: 45px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #adff2f;
+      animation: flickerAnim 4s infinite;
+    }
+    
+    @keyframes flickerAnim {
+      0% { opacity: 1; }
+      10% { opacity: 0.65; }
+      14% { opacity: 1; }
+      20% { opacity: 0.7; }
+      22% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    
+    .subtitle {
+      margin-top: 10px;
+      color: #ffffffb5;
+      font-size: 17px;
+    }
+    
+    .chips {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .chip {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(173,255,47,0.4);
+      background: rgba(173,255,47,0.12);
+      font-size: 14px;
+    }
+    
+    /* Hover Cards */
+    .card {
+      width: 100%;
+      max-width: 700px;
+      margin: 25px auto;
+      padding: 26px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.32);
+      border: 1px solid rgba(173,255,47,0.25);
+      transition: transform 0.35s cubic-bezier(.18,.89,.32,1.28),
+                  box-shadow 0.35s ease,
+                  border-color 0.35s ease,
+                  background 0.35s ease;
+      box-shadow: 0 8px 18px rgba(173,255,47,0.08);
+    }
+    
+    .card:hover {
+      transform: translateY(-8px) scale(1.045);
+      border-color: #adff2f;
+      background: rgba(0, 30, 0, 0.45);
+      box-shadow: 0 0 22px rgba(173,255,47,0.35),
+                  0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .card-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #adff2f;
+      letter-spacing: 1.5px;
+      text-align: center;
+    }
+    
+    .card-sub {
+      margin-top: 4px;
+      color: #ffffffb5;
+      font-size: 15px;
+      text-align: center;
+    }
+    
+    .card-body {
+      margin-top: 15px;
+      color: #ffffffb0;
+      font-size: 16px;
       line-height: 1.6;
     }
-    header {
-      background: #1f1f1f;
-      padding: 30px;
-      text-align: center;
-      border-bottom: 3px solid #4fc3f7;
-    }
-    header h1 {
-      font-size: 40px;
-      margin: 0;
-      color: #4fc3f7;
-    }
-    .container {
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-    }
-    h2 {
-      color: #4fc3f7;
-      font-size: 28px;
-      margin-top: 40px;
-      border-bottom: 2px solid #4fc3f7;
-      padding-bottom: 5px;
-    }
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    ul {
+    
+    .card-body ul {
       padding-left: 20px;
+      margin-top: 10px;
     }
+    
+    .card-body li {
+      margin-bottom: 8px;
+    }
+    
     .faq-item {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      color: #ffffffb0;
     }
+    
     .faq-item strong {
-      color: #4fc3f7;
+      color: #adff2f;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      padding: 40px 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Indy CTF</h1>
-    <p>A beginner-friendly cybersecurity competition hosted at Independence High School</p>
-  </header>
+  <div class="bg-gradient"></div>
+  <div class="scanlines"></div>
+  <div id="code" class="code-lines"></div>
 
   <div class="container">
-
-    <h2>About Indy CTF</h2>
-    <div class="card">
-      <p>
-        Indy CTF is a hands-on cybersecurity competition built to help new students break into the CTF world without the fear or pressure that usually pushes people away. It’s designed as a safe, low-stress environment where beginners can learn, experiment, and compete while still getting the rush of solving real challenges.
-      </p>
-      <p>
-        Teams of up to four players work together to solve digital puzzles across multiple categories. Everything is structured so newcomers can actually participate and succeed, not sit confused for four hours. If you’ve ever been curious about cybersecurity, this is the easiest on-ramp you’ll ever get.
-      </p>
+    <div class="header">
+      <div class="flicker">INDY CTF</div>
+      <div class="subtitle">
+        A beginner-friendly cybersecurity competition hosted at Independence High School
+      </div>
+      <div class="chips">
+        <div class="chip"><b>LOCATION:</b> Independence HS</div>
+        <div class="chip"><b>DURATION:</b> 4 Hours</div>
+        <div class="chip"><b>COST:</b> Free</div>
+        <div class="chip"><b>DATE:</b> <span id="date"></span></div>
+      </div>
     </div>
 
-    <h2>Challenge Format</h2>
+    <!-- About -->
     <div class="card">
-      <p>
+      <div class="card-title">ABOUT INDY CTF</div>
+      <div class="card-sub">What this event is.</div>
+      <div class="card-body">
+        Indy CTF is a hands-on cybersecurity competition built to help new students break into the CTF world without the fear or pressure that usually pushes people away. It's designed as a safe, low-stress environment where beginners can learn, experiment, and compete while still getting the rush of solving real challenges.
+        <br><br>
+        Teams of up to four players work together to solve digital puzzles across multiple categories. Everything is structured so newcomers can actually participate and succeed, not sit confused for four hours. If you've ever been curious about cybersecurity, this is the easiest on-ramp you'll ever get.
+      </div>
+    </div>
+
+    <!-- Challenge Format -->
+    <div class="card">
+      <div class="card-title">CHALLENGE FORMAT</div>
+      <div class="card-sub">What you will face.</div>
+      <div class="card-body">
         The event uses a Jeopardy-style scoring format. Each challenge has a short description and a flag to find. Harder challenges award more points, and the live scoreboard updates as teams progress.
-      </p>
-      <p>
+        <br><br>
         All categories are included except programming-heavy or Linux-terminal–dependent challenges. These challenges focus on accessibility and learning, not gatekeeping.
-      </p>
-      <ul>
-        <li>Web Exploitation</li>
-        <li>Forensics</li>
-        <li>Reverse Engineering</li>
-        <li>Cryptography</li>
-        <li>OSINT</li>
-        <li>Steganography</li>
-        <li>Misc Challenges</li>
-      </ul>
+        <ul>
+          <li>Web Exploitation</li>
+          <li>Forensics</li>
+          <li>Reverse Engineering</li>
+          <li>Cryptography</li>
+          <li>OSINT</li>
+          <li>Steganography</li>
+          <li>Misc Challenges</li>
+        </ul>
+      </div>
     </div>
 
-    <h2>What to Expect</h2>
+    <!-- What to Expect -->
     <div class="card">
-      <ul>
-        <li>Four-hour in-person event at Independence High School</li>
-        <li>Teams of up to four students</li>
-        <li>Beginner-friendly challenges that still feel real</li>
-        <li>A relaxed learning environment with genuine competition energy</li>
-        <li>Live scoreboard and full challenge platform</li>
-        <li>Prizes for all teams (TBD but worth it)</li>
-      </ul>
+      <div class="card-title">WHAT TO EXPECT</div>
+      <div class="card-sub">The competition experience.</div>
+      <div class="card-body">
+        <ul>
+          <li>Four-hour in-person event at Independence High School</li>
+          <li>Teams of up to four students</li>
+          <li>Beginner-friendly challenges that still feel real</li>
+          <li>A relaxed learning environment with genuine competition energy</li>
+          <li>Live scoreboard and full challenge platform</li>
+          <li>Prizes for all teams (TBD but worth it)</li>
+        </ul>
+      </div>
     </div>
 
-    <h2>Rules & Judging</h2>
+    <!-- Rules & Judging -->
     <div class="card">
-      <p>Dynamic scoring is used: challenges solved by fewer teams become worth more points.</p>
-      <p>General rules:</p>
-      <ul>
-        <li>No attacking event infrastructure</li>
-        <li>No brute forcing services</li>
-        <li>No interfering with other teams</li>
-        <li>Submit flags through the official scoring site</li>
-        <li>All decisions by judges are final</li>
-      </ul>
+      <div class="card-title">RULES & JUDGING</div>
+      <div class="card-sub">How points work.</div>
+      <div class="card-body">
+        Dynamic scoring is used: challenges solved by fewer teams become worth more points.
+        <br><br>
+        General rules:
+        <ul>
+          <li>No attacking event infrastructure</li>
+          <li>No brute forcing services</li>
+          <li>No interfering with other teams</li>
+          <li>Submit flags through the official scoring site</li>
+          <li>All decisions by judges are final</li>
+        </ul>
+      </div>
     </div>
 
-    <h2>Why Join?</h2>
+    <!-- Why Join -->
     <div class="card">
-      <p>
-        This event gives you real cybersecurity experience without throwing you into the deep end. You’ll learn by doing, build confidence, and walk away with something meaningful for your resume or college applications.
-      </p>
-      <ul>
-        <li>Hands-on cybersecurity practice</li>
-        <li>A safe first step into CTFs</li>
-        <li>Team-based learning</li>
-        <li>Great prizes for everyone</li>
-        <li>A fun, competitive environment with zero risk</li>
-      </ul>
+      <div class="card-title">WHY JOIN?</div>
+      <div class="card-sub">The benefits.</div>
+      <div class="card-body">
+        This event gives you real cybersecurity experience without throwing you into the deep end. You'll learn by doing, build confidence, and walk away with something meaningful for your resume or college applications.
+        <ul>
+          <li>Hands-on cybersecurity practice</li>
+          <li>A safe first step into CTFs</li>
+          <li>Team-based learning</li>
+          <li>Great prizes for everyone</li>
+          <li>A fun, competitive environment with zero risk</li>
+        </ul>
+      </div>
     </div>
 
-    <h2>FAQ</h2>
+    <!-- FAQ -->
     <div class="card">
-      <div class="faq-item"><strong>Team size?</strong> Up to 4 people.</div>
-      <div class="faq-item"><strong>Experience required?</strong> None at all. Total beginners are welcome.</div>
-      <div class="faq-item"><strong>What do I need?</strong> A laptop that can run a virtual machine.</div>
-      <div class="faq-item"><strong>Duration?</strong> 4 hours of challenge time.</div>
-      <div class="faq-item"><strong>Format?</strong> In-person, Jeopardy-style CTF.</div>
-      <div class="faq-item"><strong>Prizes?</strong> TBD, but genuinely good.</div>
-      <div class="faq-item"><strong>Cost?</strong> Completely free.</div>
+      <div class="card-title">FAQ</div>
+      <div class="card-sub">Common questions.</div>
+      <div class="card-body">
+        <div class="faq-item"><strong>Team size?</strong> Up to 4 people.</div>
+        <div class="faq-item"><strong>Experience required?</strong> None at all. Total beginners are welcome.</div>
+        <div class="faq-item"><strong>What do I need?</strong> A laptop that can run a virtual machine.</div>
+        <div class="faq-item"><strong>Duration?</strong> 4 hours of challenge time.</div>
+        <div class="faq-item"><strong>Format?</strong> In-person, Jeopardy-style CTF.</div>
+        <div class="faq-item"><strong>Prizes?</strong> TBD, but genuinely good.</div>
+        <div class="faq-item"><strong>Cost?</strong> Completely free.</div>
+      </div>
     </div>
 
   </div>
+
+  <script>
+    /* Live date */
+    document.getElementById("date").textContent = new Date().toISOString().slice(0, 16).replace("T", " ");
+
+    /* Animated code background */
+    const codeEl = document.getElementById("code");
+    const lines = Array.from({ length: 40 }, () => "");
+    const chars = "01<>/\\|#%&@+=-[]{}*";
+    
+    function updateLines() {
+      codeEl.innerHTML = "";
+      for (let i = 0; i < lines.length; i++) {
+        lines[i] += chars[Math.floor(Math.random() * chars.length)];
+        if (lines[i].length > 220) lines[i] = lines[i].slice(1);
+        const div = document.createElement("div");
+        div.textContent = lines[i];
+        codeEl.appendChild(div);
+      }
+    }
+    
+    setInterval(updateLines, 70);
+  </script>
 </body>
 </html>
