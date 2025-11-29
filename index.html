@@ -3,113 +3,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About IndyCTF</title>
+  <title>Indy CTF</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0e0e0e;
+      color: #fff;
       line-height: 1.6;
-      margin: 40px;
-      max-width: 900px;
     }
-    h1, h2, h3 {
-      margin-top: 30px;
+    header {
+      background: #1f1f1f;
+      padding: 30px;
+      text-align: center;
+      border-bottom: 3px solid #4fc3f7;
+    }
+    header h1 {
+      font-size: 40px;
+      margin: 0;
+      color: #4fc3f7;
+    }
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #4fc3f7;
+      font-size: 28px;
+      margin-top: 40px;
+      border-bottom: 2px solid #4fc3f7;
+      padding-bottom: 5px;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
     }
     ul {
-      margin-left: 20px;
+      padding-left: 20px;
     }
-    pre {
-      background: #f4f4f4;
-      padding: 15px;
-      border-radius: 6px;
-      overflow-x: auto;
+    .faq-item {
+      margin-bottom: 20px;
+    }
+    .faq-item strong {
+      color: #4fc3f7;
     }
   </style>
 </head>
 <body>
-  <h1>About IndyCTF</h1>
-  <p>
-    Welcome to IndyCTF — Independence High School’s entry-level, beginner-friendly Capture The Flag event designed to help new students try cybersecurity without the pressure. If you’ve ever wanted to dip your toes into CTFs but felt intimidated, this is the perfect place to start.
-  </p>
+  <header>
+    <h1>Indy CTF</h1>
+    <p>A beginner-friendly cybersecurity competition hosted at Independence High School</p>
+  </header>
 
-  <h2>Event Details</h2>
-  <pre>{
-  "location": "Independence High School",
-  "date": "TBD",
-  "format": "Jeopardy-Style Cybersecurity CTF",
-  "open_to": "All Skill Levels, Beginner-Focused",
-  "team_size": "Up to 4 People",
-  "duration": "4 Hours",
-  "requirements": "A computer capable of running a VM",
-  "in_person": true
-}</pre>
+  <div class="container">
 
-  <h2>The Challenge</h2>
-  <p><strong>COMING SOON</strong></p>
-  <p>
-    The specific categories, point breakdowns, and challenge details will be revealed at the start of the competition. Expect a mix of classic CTF styles: forensics, OSINT, cryptography, web, steganography, and more. No heavy coding or Linux-based terminal knowledge required — we keep it accessible.
-  </p>
+    <h2>About Indy CTF</h2>
+    <div class="card">
+      <p>
+        Indy CTF is a hands-on cybersecurity competition built to help new students break into the CTF world without the fear or pressure that usually pushes people away. It’s designed as a safe, low-stress environment where beginners can learn, experiment, and compete while still getting the rush of solving real challenges.
+      </p>
+      <p>
+        Teams of up to four players work together to solve digital puzzles across multiple categories. Everything is structured so newcomers can actually participate and succeed, not sit confused for four hours. If you’ve ever been curious about cybersecurity, this is the easiest on-ramp you’ll ever get.
+      </p>
+    </div>
 
-  <h2>What to Expect</h2>
-  <ul>
-    <li>You'll get a clear set of challenges and point values when the event begins.</li>
-    <li>You'll work in teams of up to four to solve puzzles across different cybersecurity categories.</li>
-    <li>All challenges are designed to help you learn, not overwhelm you — perfect for first-timers.</li>
-    <li>No programming or terminal-heavy tasks. Everything is doable with guided reasoning and tools provided.</li>
-    <li>The environment is supportive, relaxed, and meant to build confidence.</li>
-  </ul>
+    <h2>Challenge Format</h2>
+    <div class="card">
+      <p>
+        The event uses a Jeopardy-style scoring format. Each challenge has a short description and a flag to find. Harder challenges award more points, and the live scoreboard updates as teams progress.
+      </p>
+      <p>
+        All categories are included except programming-heavy or Linux-terminal–dependent challenges. These challenges focus on accessibility and learning, not gatekeeping.
+      </p>
+      <ul>
+        <li>Web Exploitation</li>
+        <li>Forensics</li>
+        <li>Reverse Engineering</li>
+        <li>Cryptography</li>
+        <li>OSINT</li>
+        <li>Steganography</li>
+        <li>Misc Challenges</li>
+      </ul>
+    </div>
 
-  <h2>What to Bring</h2>
-  <ul>
-    <li>Your computer, charger, and the ability to run a virtual machine.</li>
-    <li>Any notes or references you find helpful.</li>
-    <li>An open mind and willingness to try something new.</li>
-  </ul>
+    <h2>What to Expect</h2>
+    <div class="card">
+      <ul>
+        <li>Four-hour in-person event at Independence High School</li>
+        <li>Teams of up to four students</li>
+        <li>Beginner-friendly challenges that still feel real</li>
+        <li>A relaxed learning environment with genuine competition energy</li>
+        <li>Live scoreboard and full challenge platform</li>
+        <li>Prizes for all teams (TBD but worth it)</li>
+      </ul>
+    </div>
 
-  <h2>Prizes</h2>
-  <p>
-    Prizes are TBD, but expect them to be legitimately good — not the usual “sticker and handshake” type. Every team walks away with something, but top teams will get the best rewards.
-  </p>
+    <h2>Rules & Judging</h2>
+    <div class="card">
+      <p>Dynamic scoring is used: challenges solved by fewer teams become worth more points.</p>
+      <p>General rules:</p>
+      <ul>
+        <li>No attacking event infrastructure</li>
+        <li>No brute forcing services</li>
+        <li>No interfering with other teams</li>
+        <li>Submit flags through the official scoring site</li>
+        <li>All decisions by judges are final</li>
+      </ul>
+    </div>
 
-  <h2>Why Join IndyCTF?</h2>
-  <ul>
-    <li>A low-stress entry point into cybersecurity competitions.</li>
-    <li>A chance to experience problem-solving under time pressure without any real risk.</li>
-    <li>Team-based learning that helps you build confidence fast.</li>
-    <li>Great experience for resumes, college apps, and anyone curious about cybersecurity.</li>
-    <li>It’s actually fun. You’ll surprise yourself with what you can solve.</li>
-  </ul>
+    <h2>Why Join?</h2>
+    <div class="card">
+      <p>
+        This event gives you real cybersecurity experience without throwing you into the deep end. You’ll learn by doing, build confidence, and walk away with something meaningful for your resume or college applications.
+      </p>
+      <ul>
+        <li>Hands-on cybersecurity practice</li>
+        <li>A safe first step into CTFs</li>
+        <li>Team-based learning</li>
+        <li>Great prizes for everyone</li>
+        <li>A fun, competitive environment with zero risk</li>
+      </ul>
+    </div>
 
-  <h2>Our Vision</h2>
-  <p>
-    IndyCTF exists to give new students a safe space to learn, experiment, and fail without judgment. Cybersecurity shouldn’t feel gatekept — this event is built to tear down that barrier and help you find your footing in a community that welcomes curiosity.
-  </p>
+    <h2>FAQ</h2>
+    <div class="card">
+      <div class="faq-item"><strong>Team size?</strong> Up to 4 people.</div>
+      <div class="faq-item"><strong>Experience required?</strong> None at all. Total beginners are welcome.</div>
+      <div class="faq-item"><strong>What do I need?</strong> A laptop that can run a virtual machine.</div>
+      <div class="faq-item"><strong>Duration?</strong> 4 hours of challenge time.</div>
+      <div class="faq-item"><strong>Format?</strong> In-person, Jeopardy-style CTF.</div>
+      <div class="faq-item"><strong>Prizes?</strong> TBD, but genuinely good.</div>
+      <div class="faq-item"><strong>Cost?</strong> Completely free.</div>
+    </div>
 
-  <h2>FAQ</h2>
-  <h3>What is a CTF?</h3>
-  <p>
-    A Capture The Flag competition is a set of cybersecurity puzzles you solve to earn points. It’s hands-on learning disguised as a competition.
-  </p>
-
-  <h3>Do I need experience?</h3>
-  <p>No. IndyCTF was literally made for people with zero experience.</p>
-
-  <h3>Who can compete?</h3>
-  <p>Anyone at Independence who wants to try cybersecurity, learn, or compete for prizes.</p>
-
-  <h3>How big are teams?</h3>
-  <p>Up to 4 people. Bring a full squad or join one when you arrive.</p>
-
-  <h3>Is AI allowed?</h3>
-  <p>Yes, you can use AI tools for brainstorming and assistance. Just don’t expect them to solve everything for you.</p>
-
-  <h3>What skills will I learn?</h3>
-  <p>
-    How to approach unfamiliar problems, break puzzles apart, manage time in a competitive environment, and get comfortable with cybersecurity basics.
-  </p>
-
-  <h2>Get Ready</h2>
-  <p>
-    IndyCTF is your chance to test your curiosity, learn fast, and have fun with no pressure. The full challenge set drops at the event. Come ready to jump in.
-  </p>
+  </div>
 </body>
 </html>
