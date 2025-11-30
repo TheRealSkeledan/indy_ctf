@@ -1,380 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Indy CTF</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
+<meta charset="UTF-8">
+<title>INDY CTF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
     body {
-      margin: 0;
-      font-family: Courier, monospace;
-      background: #050505;
-      color: white;
-      overflow-x: hidden;
+        margin: 0;
+        font-family: Courier, monospace;
+        background: #050505;
+        color: white;
+        overflow-x: hidden;
     }
-    
+
     /* Background gradient */
     .bg-gradient {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to bottom right, #001418, #000000, #001820);
-      z-index: -3;
-      animation: gradientShift 6s infinite alternate;
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(to bottom right, #001418, #000000, #001820);
+        z-index: -3;
+        animation: gradientShift 6s infinite alternate;
     }
-    
+
     @keyframes gradientShift {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(1.25); }
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.25); }
     }
-    
+
     /* Code rain lines */
     .code-lines {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      opacity: 0.08;
-      display: flex;
-      flex-direction: column;
-      font-size: 13px;
-      line-height: 13px;
-      color: #00ff88;
-      pointer-events: none;
-      white-space: nowrap;
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        opacity: 0.08;
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+        line-height: 13px;
+        color: #00ff88;
+        pointer-events: none;
+        white-space: nowrap;
     }
-    
+
     /* Vertical shimmer overlay */
     .scanlines {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.03),
-        transparent,
-        rgba(255,255,255,0.03)
-      );
-      background-size: 100% 250px;
-      animation: scan 8s linear infinite;
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03),
+            transparent,
+            rgba(255,255,255,0.03)
+        );
+        background-size: 100% 250px;
+        animation: scan 8s linear infinite;
     }
-    
+
     @keyframes scan {
-      0% { background-position: 0 -250px; }
-      100% { background-position: 0 250px; }
+        0% { background-position: 0 -250px; }
+        100% { background-position: 0 250px; }
     }
-    
+
     /* Header */
     .header {
-      text-align: center;
-      padding-top: 50px;
+        text-align: center;
+        padding-top: 50px;
     }
-    
+
     .flicker {
-      font-size: 45px;
-      font-weight: bold;
-      letter-spacing: 3px;
-      color: #adff2f;
-      animation: flickerAnim 4s infinite;
+        font-size: 45px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #adff2f;
+        animation: flickerAnim 4s infinite;
     }
-    
+
     @keyframes flickerAnim {
-      0% { opacity: 1; }
-      10% { opacity: 0.65; }
-      14% { opacity: 1; }
-      20% { opacity: 0.7; }
-      22% { opacity: 1; }
-      100% { opacity: 1; }
+        0%   { opacity: 1; }
+        10%  { opacity: 0.65; }
+        14%  { opacity: 1; }
+        20%  { opacity: 0.7; }
+        22%  { opacity: 1; }
+        100% { opacity: 1; }
     }
-    
-    .subtitle {
-      margin-top: 10px;
-      color: #ffffffb5;
-      font-size: 17px;
-    }
-    
+
     .chips {
-      margin-top: 30px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
     }
-    
+
     .chip {
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(173,255,47,0.4);
-      background: rgba(173,255,47,0.12);
-      font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(173,255,47,0.4);
+        background: rgba(173,255,47,0.12);
+        font-size: 14px;
     }
-    
+
     /* Hover Cards */
+    /* Hover Cards (improved) */
     .card {
-      width: 100%;
-      max-width: 700px;
-      margin: 25px auto;
-      padding: 26px;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.32);
-      border: 1px solid rgba(173,255,47,0.25);
-      transition: transform 0.35s cubic-bezier(.18,.89,.32,1.28),
-                  box-shadow 0.35s ease,
-                  border-color 0.35s ease,
-                  background 0.35s ease;
-      box-shadow: 0 8px 18px rgba(173,255,47,0.08);
+        width: 100%;
+        max-width: 700px;
+        margin: 25px auto;
+        padding: 26px;
+        border-radius: 16px;
+
+        background: rgba(0,0,0,0.32);
+        border: 1px solid rgba(173,255,47,0.25);
+
+        text-align: center;
+
+        /* Smooth transitions */
+        transition:
+            transform 0.35s cubic-bezier(.18,.89,.32,1.28),
+            box-shadow 0.35s ease,
+            border-color 0.35s ease,
+            background 0.35s ease;
+
+        /* Subtle resting shadow */
+        box-shadow: 0 8px 18px rgba(173,255,47,0.08);
     }
-    
+
+    /* Hover effect */
     .card:hover {
-      transform: translateY(-8px) scale(1.045);
-      border-color: #adff2f;
-      background: rgba(0, 30, 0, 0.45);
-      box-shadow: 0 0 22px rgba(173,255,47,0.35),
-                  0 10px 30px rgba(0,0,0,0.5);
+        transform: translateY(-8px) scale(1.045);
+
+        border-color: #adff2f;
+        background: rgba(0, 30, 0, 0.45);
+
+        box-shadow:
+            0 0 22px rgba(173,255,47,0.35),
+            0 10px 30px rgba(0,0,0,0.5);
     }
-    
+
     .card-title {
-      font-size: 32px;
-      font-weight: bold;
-      color: #adff2f;
-      letter-spacing: 1.5px;
-      text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #adff2f;
+        letter-spacing: 1.5px;
     }
-    
+
     .card-sub {
-      margin-top: 4px;
-      color: #ffffffb5;
-      font-size: 15px;
-      text-align: center;
+        margin-top: 4px;
+        color: #ffffffb5;
+        font-size: 15px;
     }
-    
+
     .card-body {
-      margin-top: 15px;
-      color: #ffffffb0;
-      font-size: 16px;
-      line-height: 1.6;
+        margin-top: 15px;
+        color: #ffffffb0;
+        font-size: 16px;
+        white-space: pre-line;
     }
-    
-    .card-body ul {
-      padding-left: 20px;
-      margin-top: 10px;
-    }
-    
-    .card-body li {
-      margin-bottom: 8px;
-    }
-    
-    .faq-item {
-      margin-bottom: 20px;
-      color: #ffffffb0;
-    }
-    
-    .faq-question {
-      color: #adff2f;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    
+
     .container {
-      width: 100%;
-      max-width: 700px;
-      margin: auto;
-      padding: 40px 20px;
+        width: 100%;
+        max-width: 700px;
+        margin: auto;
+        padding: 40px 20px;
     }
-
-    .cta-text {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 18px;
-      color: #adff2f;
-      font-weight: bold;
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="bg-gradient"></div>
-  <div class="scanlines"></div>
-  <div id="code" class="code-lines"></div>
 
-  <div class="container">
+<div class="bg-gradient"></div>
+<div class="scanlines"></div>
+<div id="code" class="code-lines"></div>
+
+<div class="container">
     <div class="header">
-      <div class="flicker">INDY CTF</div>
-      <div class="subtitle">
-        A beginner-friendly cybersecurity competition hosted at Independence High School
-      </div>
-      <div class="chips">
-        <div class="chip"><b>LOCATION:</b> Independence HS</div>
-        <div class="chip"><b>DURATION:</b> 4 Hours</div>
-        <div class="chip"><b>COST:</b> Free</div>
-        <div class="chip"><b>DATE:</b> TBD</div>
-      </div>
+        <div class="flicker">INDY CTF</div>
+
+        <div style="margin-top:10px; color:#ffffffb5; font-size:17px;">
+            Real-world cybersecurity challenges for all skill levels.
+        </div>
+
+        <div class="chips">
+            <div class="chip"><b>LOCATION:</b> US-EAST-01</div>
+            <div class="chip"><b>STATUS:</b> ACTIVE</div>
+            <div class="chip"><b>DATE:</b> <span id="date"></span></div>
+        </div>
     </div>
 
-    <!-- About -->
+    <!-- Cards -->
     <div class="card">
-      <div class="card-title">ABOUT INDY CTF</div>
-      <div class="card-sub">What this competition is all about.</div>
-      <div class="card-body">
-        Indy CTF is a hands-on cybersecurity competition built to help new students break into the CTF world without the fear or pressure that usually pushes people away. It's designed as a safe, low-stress environment where beginners can learn, experiment, and compete while still getting the rush of solving real challenges.
-        <br><br>
-        Teams of up to four players work together to solve digital puzzles across multiple categories. Everything is structured so newcomers can actually participate and succeed, not sit confused for four hours. If you've ever been curious about cybersecurity, this is the easiest on-ramp you'll ever get.
-      </div>
+        <div class="card-title">ABOUT</div>
+        <div class="card-sub">What this event is.</div>
+        <div class="card-body">
+            INDY CTF is a training ground for hackers—cryptography, logic puzzles,
+            network infiltration, and more.
+        </div>
     </div>
 
-    <!-- Challenge Format -->
     <div class="card">
-      <div class="card-title">THE CHALLENGES</div>
-      <div class="card-sub">What you'll be solving.</div>
-      <div class="card-body">
-        The event uses a Jeopardy-style scoring format. Each challenge has a short description and a flag to find—essentially a secret string that proves you solved it. Harder challenges award more points, and the live scoreboard updates as teams progress.
-        <br><br>
-        All categories are included except programming-heavy or Linux-terminal–dependent challenges. These challenges focus on accessibility and learning, not gatekeeping. You'll tackle:
-        <ul>
-          <li><b>Web Exploitation</b> – Find vulnerabilities in web applications</li>
-          <li><b>Forensics</b> – Analyze files and memory dumps for hidden data</li>
-          <li><b>Reverse Engineering</b> – Understand how programs work by taking them apart</li>
-          <li><b>Cryptography</b> – Crack codes and decrypt secret messages</li>
-          <li><b>OSINT</b> – Use open-source intelligence to track down information</li>
-          <li><b>Steganography</b> – Discover hidden messages in images and files</li>
-          <li><b>Misc Challenges</b> – Wildcards that don't fit in any other category</li>
-        </ul>
-      </div>
+        <div class="card-title">CHALLENGES</div>
+        <div class="card-sub">What you will face.</div>
+        <div class="card-body">
+            Reverse engineering, forensics, binary exploitation, cryptography, web,
+            and OSINT challenges of various difficulty.
+        </div>
     </div>
 
-    <!-- What to Expect -->
     <div class="card">
-      <div class="card-title">WHAT TO EXPECT</div>
-      <div class="card-sub">The full competition experience.</div>
-      <div class="card-body">
-        Indy CTF is a four-hour in-person event where you'll be surrounded by other students who are just as excited (or nervous) about cybersecurity as you are. You'll work in teams of up to four, tackle beginner-friendly challenges that still feel authentic, and compete on a live scoreboard that updates in real-time as teams submit flags.
-        <br><br>
-        The atmosphere is designed to be relaxed but energizing—competitive without being cutthroat. You'll have access to mentors if you get stuck, a full challenge platform to submit your solutions, and prizes for all participating teams. Plus, you'll walk away with real skills and something tangible to add to your resume or college applications.
-        <br><br>
-        This isn't about sitting through lectures. You'll be actively solving puzzles, collaborating with teammates, and learning by doing. It's the kind of experience where you surprise yourself with what you can accomplish in just a few hours.
-      </div>
+        <div class="card-title">RULES & JUDGING</div>
+        <div class="card-sub">How points work.</div>
+        <div class="card-body">
+            Submit flags on a secure platform. Score scales by difficulty & solve time.
+            Leaderboard updates live.
+        </div>
     </div>
 
-    <!-- Rules & Judging -->
     <div class="card">
-      <div class="card-title">RULES & JUDGING</div>
-      <div class="card-sub">How scoring and competition work.</div>
-      <div class="card-body">
-        We use dynamic scoring, which means challenges solved by fewer teams become worth more points. If everyone gets a challenge, it's worth less. If only a few teams crack it, it's worth a lot more. This keeps things fair and rewards both speed and skill.
-        <br><br>
-        <b>General Rules:</b>
-        <ul>
-          <li><b>No attacking event infrastructure</b> – The challenge servers are off-limits. Don't try to break the platform itself.</li>
-          <li><b>No brute forcing services</b> – Be smart about your solutions. Flooding servers with automated guesses isn't allowed.</li>
-          <li><b>No interfering with other teams</b> – Play fair. This is a collaborative learning environment, not a place for sabotage.</li>
-          <li><b>Submit flags through the official site</b> – All solutions go through the scoring platform, nowhere else.</li>
-          <li><b>Judges' decisions are final</b> – If there's a dispute, the organizers have the last word.</li>
-        </ul>
-        The goal is to create a fair playing field where everyone can learn, compete, and have a great time without worrying about cheating or bad behavior.
-      </div>
+        <div class="card-title">WHY JOIN?</div>
+        <div class="card-sub">The benefits.</div>
+        <div class="card-body">
+            Sharpen your skills, join a community, build a portfolio, and challenge
+            your abilities under pressure.
+        </div>
     </div>
 
-    <!-- Why Join -->
     <div class="card">
-      <div class="card-title">WHY JOIN INDY CTF?</div>
-      <div class="card-sub">What you'll gain from participating.</div>
-      <div class="card-body">
-        <b>Build Real Skills</b><br>
-        You'll get hands-on experience with cybersecurity concepts that actually matter. This isn't theoretical knowledge—you'll be applying what you learn immediately to solve real challenges.
-        <br><br>
-        <b>Safe First Step Into CTFs</b><br>
-        Most CTF competitions are intimidating and feel impossible for beginners. Indy CTF is designed specifically to be your first experience—a place where you can learn the ropes without feeling overwhelmed or out of your depth.
-        <br><br>
-        <b>Team-Based Learning</b><br>
-        You're not doing this alone. Working in teams means you'll learn from each other, combine skills, and tackle challenges you couldn't solve solo. Collaboration is a huge part of real cybersecurity work.
-        <br><br>
-        <b>Portfolio Builder</b><br>
-        Participating in a CTF is a solid addition to college applications and resumes. It shows initiative, problem-solving skills, and technical ability—all things that matter to admissions officers and future employers.
-        <br><br>
-        <b>Low Risk, High Reward</b><br>
-        It's completely free, beginner-friendly, and you'll leave with prizes, new skills, and confidence. There's genuinely nothing to lose and a lot to gain.
-      </div>
+        <div class="card-title">FAQ</div>
+        <div class="card-sub">Common questions.</div>
+        <div class="card-body">
+• Experience required? No.
+• Cost? Free.
+• Solo players? Allowed.
+        </div>
     </div>
 
-    <!-- FAQ -->
     <div class="card">
-      <div class="card-title">FAQ</div>
-      <div class="card-sub">Everything you need to know.</div>
-      <div class="card-body">
-        
-        <div class="faq-item">
-          <div class="faq-question">► What is a CTF, exactly?</div>
-          CTF stands for "Capture The Flag," which is a cybersecurity competition where you solve challenges to find hidden "flags"—basically secret strings of text that prove you solved the puzzle. It's like a digital scavenger hunt mixed with problem-solving and hacking (the legal, ethical kind). CTFs are used by professionals to sharpen their skills, and they're one of the best ways to learn cybersecurity in a hands-on way. Unlike reading a textbook or watching videos, CTFs force you to actually apply what you know—or figure things out as you go.
+        <div class="card-title">SPONSORS</div>
+        <div class="card-sub">Who supports this.</div>
+        <div class="card-body">
+            Supported by tech orgs, local companies, cybersecurity groups, and universities.
         </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► Do I need any experience to participate?</div>
-          None at all. Seriously. Indy CTF is designed specifically for people who have never done this before. If you're curious about cybersecurity, interested in puzzles, or just want to try something new, you're qualified. You don't need to be a coder, a hacker, or even particularly tech-savvy. You'll learn as you go, and the challenges are structured to teach you the basics. The only requirement is showing up with an open mind and a willingness to learn. Everyone starts somewhere, and this is a perfect place to start.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► What should I bring to Indy CTF?</div>
-          Bring a laptop that can run a virtual machine. Most CTF challenges involve using tools that work best on Linux, so having a virtual machine like VirtualBox or VMware with Kali Linux or Ubuntu installed is ideal. If you're not sure how to set that up, we'll have guides and mentors available to help you get started. Also bring your laptop charger (running a VM drains battery fast), any necessary cables, and a positive attitude. You don't need special equipment or expensive tools—just your computer and your brain.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► How do teams work?</div>
-          Teams can have up to four people. You can form teams ahead of time with friends, or you can find teammates at the event. The best teams have a mix of skills—some people are good at cryptography, others are better at web challenges, and some are great at forensics or OSINT. But honestly, even if everyone on your team is a beginner, you'll still be able to contribute and learn together. Collaboration is key. You'll be brainstorming, dividing up challenges, sharing discoveries, and helping each other figure things out. It's way more fun than going solo.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► What if I get stuck on a challenge?</div>
-          That's completely normal and expected! Getting stuck is part of the learning process. We'll have mentors and organizers available throughout the event to give hints, point you in the right direction, or explain concepts you're unfamiliar with. Plus, you'll be working in a team, so you can bounce ideas off each other. The goal isn't to feel frustrated—it's to learn and have fun. If a challenge is too hard, move on to another one and come back later. There's no shame in asking for help or switching gears.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► Are there prizes?</div>
-          Yes! All participating teams will receive prizes, and the top-performing teams will get even better rewards. But honestly, the real prize is the experience itself—you'll walk away with new skills, confidence, and something impressive to add to your portfolio. Whether you win or not, you'll have accomplished something meaningful by participating and challenging yourself.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► Is Indy CTF really free?</div>
-          Completely free. No registration fees, no admission costs, no hidden charges. Just show up with your laptop and you're good to go. We want this to be accessible to everyone, so cost is never a barrier.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► Can I participate solo, or do I need a team?</div>
-          You can technically participate solo if you really want to, but we strongly recommend joining or forming a team. CTFs are way more fun and effective as a team activity. You'll learn more, solve more challenges, and have a better time overall. If you don't have a team, we'll help you find teammates at the event.
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">► What will I actually learn?</div>
-          You'll learn practical cybersecurity skills like identifying vulnerabilities in websites, analyzing files for hidden data, understanding encryption, using investigative techniques to find information online, and thinking like a hacker (in a legal, ethical way). Beyond technical skills, you'll also develop problem-solving abilities, teamwork, time management, and resilience. You'll learn how to tackle unfamiliar problems, research solutions, and persist even when things get tough. These are skills that translate way beyond cybersecurity.
-        </div>
-
-      </div>
     </div>
+</div>
 
-    <div class="cta-text">
-      ● Ready to test your skills? Grab your laptop and join us at Indy CTF.
-    </div>
-
-  </div>
-
-  <script>
+<script>
     /* Live date */
-    document.getElementById("date").textContent = new Date().toISOString().slice(0, 16).replace("T", " ");
+    document.getElementById("date").textContent =
+        new Date().toISOString().slice(0, 16).replace("T", " ");
 
     /* Animated code background */
     const codeEl = document.getElementById("code");
     const lines = Array.from({ length: 40 }, () => "");
+
     const chars = "01<>/\\|#%&@+=-[]{}*";
-    
+
     function updateLines() {
-      codeEl.innerHTML = "";
-      for (let i = 0; i < lines.length; i++) {
-        lines[i] += chars[Math.floor(Math.random() * chars.length)];
-        if (lines[i].length > 220) lines[i] = lines[i].slice(1);
-        const div = document.createElement("div");
-        div.textContent = lines[i];
-        codeEl.appendChild(div);
-      }
+        codeEl.innerHTML = "";
+        for (let i = 0; i < lines.length; i++) {
+            lines[i] += chars[Math.floor(Math.random() * chars.length)];
+            if (lines[i].length > 220)
+                lines[i] = lines[i].slice(1);
+
+            const div = document.createElement("div");
+            div.textContent = lines[i];
+            codeEl.appendChild(div);
+        }
     }
-    
+
     setInterval(updateLines, 70);
-  </script>
+</script>
+
 </body>
 </html>
