@@ -82,9 +82,28 @@
         100% { opacity: 1; }
     }
 
-    .back-link {
-        display: inline-block;
-        margin: 20px 0 0 20px;
+    /* Navigation Panel */
+    .nav-panel {
+        background: rgba(0,0,0,0.5);
+        border-bottom: 2px solid rgba(173,255,47,0.3);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+    }
+
+    .nav-container {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+
+    .nav-link {
         padding: 10px 20px;
         color: #adff2f;
         text-decoration: none;
@@ -92,12 +111,19 @@
         border-radius: 8px;
         background: rgba(173,255,47,0.12);
         transition: all 0.3s ease;
+        font-size: 14px;
+        letter-spacing: 1px;
     }
 
-    .back-link:hover {
+    .nav-link:hover {
         background: rgba(173,255,47,0.25);
         box-shadow: 0 0 15px rgba(173,255,47,0.3);
-        transform: translateX(-3px);
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        background: rgba(173,255,47,0.3);
+        border-color: #adff2f;
     }
 
     .container {
@@ -250,7 +276,14 @@
 <div class="scanlines"></div>
 <div id="code" class="code-lines"></div>
 
-<a href="index.html" class="back-link">← BACK TO HOME</a>
+<!-- Navigation Panel -->
+<div class="nav-panel">
+    <div class="nav-container">
+        <a href="index.html" class="nav-link">HOME</a>
+        <a href="student-registration.html" class="nav-link active">STUDENT REGISTRATION</a>
+        <a href="sponsor.html" class="nav-link">SPONSORS</a>
+    </div>
+</div>
 
 <div class="container">
     <div class="header">
@@ -261,7 +294,7 @@
     </div>
 
     <div class="info-box">
-        <strong> REGISTRATION INFO:</strong> Choose the registration type that applies to you. Independent students can register directly, while schools and advisors can register teams or groups. All participants must follow the event rules and code of conduct.
+        <strong>REGISTRATION INFO:</strong> Choose the registration type that applies to you. Independent students can register directly, while schools and advisors can register teams or groups. All participants must follow the event rules and code of conduct.
     </div>
 
     <div class="section-title">CHOOSE YOUR REGISTRATION TYPE</div>
