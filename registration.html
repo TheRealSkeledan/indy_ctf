@@ -1,1 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Registration - INDY CTF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+    body {
+        margin: 0;
+        font-family: Courier, monospace;
+        background: #050505;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .bg-gradient {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(to bottom right, #001418, #000000, #001820);
+        z-index: -3;
+        animation: gradientShift 6s infinite alternate;
+    }
+
+    @keyframes gradientShift {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.25); }
+    }
+
+    .code-lines {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        opacity: 0.08;
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+        line-height: 13px;
+        color: #00ff88;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .scanlines {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03),
+            transparent,
+            rgba(255,255,255,0.03)
+        );
+        background-size: 100% 250px;
+        animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+        0% { background-position: 0 -250px; }
+        100% { background-position: 0 250px; }
+    }
+
+    .header {
+        text-align: center;
+        padding-top: 50px;
+    }
+
+    .flicker {
+        font-size: 45px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #adff2f;
+        animation: flickerAnim 4s infinite;
+    }
+
+    @keyframes flickerAnim {
+        0%   { opacity: 1; }
+        10%  { opacity: 0.65; }
+        14%  { opacity: 1; }
+        20%  { opacity: 0.7; }
+        22%  { opacity: 1; }
+        100% { opacity: 1; }
+    }
+
+    .back-link {
+        display: inline-block;
+        margin: 20px 0 0 20px;
+        padding: 10px 20px;
+        color: #adff2f;
+        text-decoration: none;
+        border: 1px solid rgba(173,255,47,0.4);
+        border-radius: 8px;
+        background: rgba(173,255,47,0.12);
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        background: rgba(173,255,47,0.25);
+        box-shadow: 0 0 15px rgba(173,255,47,0.3);
+        transform: translateX(-3px);
+    }
+
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+        padding: 40px 20px;
+    }
+
+    .info-box {
+        padding: 20px;
+        background: rgba(173,255,47,0.08);
+        border-left: 4px solid #adff2f;
+        border-radius: 4px;
+        margin: 30px 0;
+        color: #ffffffb0;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .registration-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin: 50px 0;
+    }
+
+    .registration-card {
+        padding: 35px;
+        border-radius: 16px;
+        background: rgba(0,0,0,0.32);
+        border: 2px solid rgba(173,255,47,0.25);
+        transition: all 0.4s cubic-bezier(.18,.89,.32,1.28);
+        box-shadow: 0 8px 18px rgba(173,255,47,0.08);
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .registration-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: #adff2f;
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .registration-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        border-color: #adff2f;
+        background: rgba(0, 30, 0, 0.45);
+        box-shadow: 
+            0 0 30px rgba(173,255,47,0.4),
+            0 15px 40px rgba(0,0,0,0.6);
+    }
+
+    .registration-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .card-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #adff2f;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .card-description {
+        color: #ffffffb5;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+
+    .feature-list {
+        text-align: left;
+        margin: 20px 0;
+        padding-left: 20px;
+    }
+
+    .feature-item {
+        color: #ffffffb5;
+        font-size: 14px;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .feature-item::before {
+        content: '→ ';
+        color: #adff2f;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .register-btn {
+        display: inline-block;
+        width: 100%;
+        padding: 15px 30px;
+        background: rgba(173,255,47,0.15);
+        border: 2px solid #adff2f;
+        border-radius: 10px;
+        color: #adff2f;
+        font-family: Courier, monospace;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        box-sizing: border-box;
+    }
+
+    .register-btn:hover {
+        background: #adff2f;
+        color: #000;
+        box-shadow: 0 0 25px rgba(173,255,47,0.5);
+        transform: translateY(-2px);
+    }
+
+    .section-title {
+        text-align: center;
+        color: #adff2f;
+        font-size: 32px;
+        letter-spacing: 2px;
+        margin: 50px 0 20px 0;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: #ffffffb5;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="scanlines"></div>
+<div id="code" class="code-lines"></div>
+
+<a href="index.html" class="back-link">← BACK TO HOME</a>
+
+<div class="container">
+    <div class="header">
+        <div class="flicker">STUDENT REGISTRATION</div>
+        <div style="margin-top:10px; color:#ffffffb5; font-size:17px;">
+            Join the next generation of cybersecurity professionals.
+        </div>
+    </div>
+
+    <div class="info-box">
+        <strong> REGISTRATION INFO:</strong> Choose the registration type that applies to you. Independent students can register directly, while schools and advisors can register teams or groups. All participants must follow the event rules and code of conduct.
+    </div>
+
+    <div class="section-title">CHOOSE YOUR REGISTRATION TYPE</div>
+    <div class="section-subtitle">Select the option that best describes your participation</div>
+
+    <div class="registration-grid">
+        <!-- Independent Student Registration -->
+        <div class="registration-card">
+            <div class="card-icon"></div>
+            <div class="card-title">INDEPENDENT</div>
+            <div class="card-description">
+                For individual students registering on their own, whether competing solo or forming teams at the event.
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">Register as an individual</div>
+                <div class="feature-item">Compete solo or join a team</div>
+                <div class="feature-item">Open to all skill levels</div>
+                <div class="feature-item">No school affiliation required</div>
+            </div>
+
+            <a href="https://forms.google.com/your-independent-form-link" class="register-btn" target="_blank">REGISTER AS INDEPENDENT</a>
+        </div>
+
+        <!-- School/Advisor Registration -->
+        <div class="registration-card">
+            <div class="card-icon"></div>
+            <div class="card-title">SCHOOL / ADVISOR</div>
+            <div class="card-description">
+                For teachers, advisors, or coordinators registering students from their school or organization.
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">Register multiple students</div>
+                <div class="feature-item">Group/team registration</div>
+                <div class="feature-item">School-wide participation</div>
+                <div class="feature-item">Advisor support and coordination</div>
+            </div>
+
+            <a href="https://forms.google.com/your-school-form-link" class="register-btn" target="_blank">REGISTER AS SCHOOL/ADVISOR</a>
+        </div>
+    </div>
+
+    <div class="info-box" style="margin-top: 50px;">
+        <strong> NEED HELP?</strong> Not sure which registration to choose? Independent registration is for students signing up on their own. School/Advisor registration is for educators bringing groups of students. Questions? Contact us at registration@indyctf.com
+    </div>
+</div>
+
+<script>
+    const codeEl = document.getElementById("code");
+    const lines = Array.from({ length: 40 }, () => "");
+    const chars = "01<>/\\|#%&@+=-[]{}*";
+
+    function updateLines() {
+        codeEl.innerHTML = "";
+        for (let i = 0; i < lines.length; i++) {
+            lines[i] += chars[Math.floor(Math.random() * chars.length)];
+            if (lines[i].length > 220)
+                lines[i] = lines[i].slice(1);
+
+            const div = document.createElement("div");
+            div.textContent = lines[i];
+            codeEl.appendChild(div);
+        }
+    }
+
+    setInterval(updateLines, 70);
+</script>
+
+</body>
+</html>
