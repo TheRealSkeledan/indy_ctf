@@ -63,6 +63,50 @@
         100% { background-position: 0 250px; }
     }
 
+    /* Navigation Panel */
+    .nav-panel {
+        background: rgba(0,0,0,0.5);
+        border-bottom: 2px solid rgba(173,255,47,0.3);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+    }
+
+    .nav-container {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+
+    .nav-link {
+        padding: 10px 20px;
+        color: #adff2f;
+        text-decoration: none;
+        border: 1px solid rgba(173,255,47,0.4);
+        border-radius: 8px;
+        background: rgba(173,255,47,0.12);
+        transition: all 0.3s ease;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .nav-link:hover {
+        background: rgba(173,255,47,0.25);
+        box-shadow: 0 0 15px rgba(173,255,47,0.3);
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        background: rgba(173,255,47,0.3);
+        border-color: #adff2f;
+    }
+
     /* Header */
     .header {
         text-align: center;
@@ -103,7 +147,6 @@
     }
 
     /* Hover Cards */
-    /* Hover Cards (improved) */
     .card {
         width: 100%;
         max-width: 700px;
@@ -173,6 +216,15 @@
 <div class="bg-gradient"></div>
 <div class="scanlines"></div>
 <div id="code" class="code-lines"></div>
+
+<!-- Navigation Panel -->
+<div class="nav-panel">
+    <div class="nav-container">
+        <a href="index.html" class="nav-link active">HOME</a>
+        <a href="student-registration.html" class="nav-link">STUDENT REGISTRATION</a>
+        <a href="sponsor.html" class="nav-link">SPONSORS</a>
+    </div>
+</div>
 
 <div class="container">
     <div class="header">
