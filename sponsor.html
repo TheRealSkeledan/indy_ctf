@@ -1,1 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sponsor Registration - INDY CTF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+    body {
+        margin: 0;
+        font-family: Courier, monospace;
+        background: #050505;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .bg-gradient {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(to bottom right, #001418, #000000, #001820);
+        z-index: -3;
+        animation: gradientShift 6s infinite alternate;
+    }
+
+    @keyframes gradientShift {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.25); }
+    }
+
+    .code-lines {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        opacity: 0.08;
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+        line-height: 13px;
+        color: #00ff88;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .scanlines {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03),
+            transparent,
+            rgba(255,255,255,0.03)
+        );
+        background-size: 100% 250px;
+        animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+        0% { background-position: 0 -250px; }
+        100% { background-position: 0 250px; }
+    }
+
+    .header {
+        text-align: center;
+        padding-top: 50px;
+    }
+
+    .flicker {
+        font-size: 45px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #adff2f;
+        animation: flickerAnim 4s infinite;
+    }
+
+    @keyframes flickerAnim {
+        0%   { opacity: 1; }
+        10%  { opacity: 0.65; }
+        14%  { opacity: 1; }
+        20%  { opacity: 0.7; }
+        22%  { opacity: 1; }
+        100% { opacity: 1; }
+    }
+
+    .back-link {
+        display: inline-block;
+        margin: 20px 0 0 20px;
+        padding: 10px 20px;
+        color: #adff2f;
+        text-decoration: none;
+        border: 1px solid rgba(173,255,47,0.4);
+        border-radius: 8px;
+        background: rgba(173,255,47,0.12);
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        background: rgba(173,255,47,0.25);
+        box-shadow: 0 0 15px rgba(173,255,47,0.3);
+        transform: translateX(-3px);
+    }
+
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+        padding: 40px 20px;
+    }
+
+    .tier-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin: 40px 0;
+    }
+
+    .tier-card {
+        padding: 30px;
+        border-radius: 16px;
+        background: rgba(0,0,0,0.32);
+        border: 2px solid rgba(173,255,47,0.25);
+        transition: all 0.4s cubic-bezier(.18,.89,.32,1.28);
+        box-shadow: 0 8px 18px rgba(173,255,47,0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tier-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: #adff2f;
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .tier-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        border-color: #adff2f;
+        background: rgba(0, 30, 0, 0.45);
+        box-shadow: 
+            0 0 30px rgba(173,255,47,0.4),
+            0 15px 40px rgba(0,0,0,0.6);
+    }
+
+    .tier-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .tier-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        background: rgba(173,255,47,0.2);
+        border: 1px solid #adff2f;
+        border-radius: 20px;
+        font-size: 12px;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .tier-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #adff2f;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+
+    .tier-price {
+        font-size: 32px;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .tier-price span {
+        font-size: 16px;
+        color: #ffffffb5;
+    }
+
+    .tier-perks {
+        text-align: left;
+        margin: 20px 0;
+    }
+
+    .perk-item {
+        padding: 10px 0;
+        color: #ffffffb5;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(173,255,47,0.1);
+    }
+
+    .perk-item:last-child {
+        border-bottom: none;
+    }
+
+    .perk-item::before {
+        content: '✓ ';
+        color: #adff2f;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .info-section {
+        margin: 50px 0;
+        padding: 30px;
+        background: rgba(0,0,0,0.32);
+        border-left: 4px solid #adff2f;
+        border-radius: 8px;
+    }
+
+    .info-section h3 {
+        color: #adff2f;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .info-section p {
+        color: #ffffffb5;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+
+    .contact-box {
+        margin-top: 50px;
+        padding: 30px;
+        background: rgba(173,255,47,0.08);
+        border: 2px solid #adff2f;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .contact-box h3 {
+        color: #adff2f;
+        margin-bottom: 15px;
+    }
+
+    .contact-box p {
+        color: #ffffffb5;
+        margin-bottom: 20px;
+    }
+
+    .contact-btn {
+        display: inline-block;
+        padding: 15px 40px;
+        background: #adff2f;
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: 2px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .contact-btn:hover {
+        box-shadow: 0 0 25px rgba(173,255,47,0.6);
+        transform: translateY(-2px);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="scanlines"></div>
+<div id="code" class="code-lines"></div>
+
+<a href="index.html" class="back-link">← BACK TO HOME</a>
+
+<div class="container">
+    <div class="header">
+        <div class="flicker">SPONSORSHIP OPPORTUNITIES</div>
+        <div style="margin-top:10px; color:#ffffffb5; font-size:17px;">
+            Support local cybersecurity education and talent development.
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>WHY SPONSOR INDY CTF?</h3>
+        <p>INDY CTF is our school's first-ever Capture The Flag competition, bringing together students passionate about cybersecurity. By sponsoring our event, you help foster the next generation of security professionals while gaining visibility among motivated learners and local tech enthusiasts.</p>
+        <p>Your support directly enables us to provide challenges, prizes, resources, and a memorable learning experience for all participants. This is an opportunity to connect with emerging talent and show your commitment to education in our community.</p>
+    </div>
+
+    <h2 style="text-align: center; color: #adff2f; letter-spacing: 2px; margin: 50px 0 30px 0;">SPONSORSHIP TIERS</h2>
+
+    <div class="tier-grid">
+        <!-- Bronze Tier -->
+        <div class="tier-card">
+            <div class="tier-badge">BRONZE</div>
+            <div class="tier-title">BRONZE</div>
+            <div class="tier-price">$100</div>
+            <div class="tier-perks">
+                <div class="perk-item">Logo on event website</div>
+                <div class="perk-item">Social media shout-out</div>
+                <div class="perk-item">Thank you in opening ceremony</div>
+                <div class="perk-item">Recognition in event materials</div>
+            </div>
+        </div>
+
+        <!-- Silver Tier -->
+        <div class="tier-card">
+            <div class="tier-badge">SILVER</div>
+            <div class="tier-title">SILVER</div>
+            <div class="tier-price">$250</div>
+            <div class="tier-perks">
+                <div class="perk-item">All Bronze tier benefits</div>
+                <div class="perk-item">Logo on event t-shirts/swag</div>
+                <div class="perk-item">Multiple social media posts</div>
+                <div class="perk-item">Table/booth space at event</div>
+                <div class="perk-item">Brief speaking opportunity</div>
+            </div>
+        </div>
+
+        <!-- Gold Tier -->
+        <div class="tier-card">
+            <div class="tier-badge">GOLD</div>
+            <div class="tier-title">GOLD</div>
+            <div class="tier-price">$500</div>
+            <div class="tier-perks">
+                <div class="perk-item">All Silver tier benefits</div>
+                <div class="perk-item">Prominent logo placement (website/venue)</div>
+                <div class="perk-item">Sponsor a challenge category</div>
+                <div class="perk-item">Extended presentation time</div>
+                <div class="perk-item">Direct access to participants</div>
+                <div class="perk-item">Co-branded certificates</div>
+            </div>
+        </div>
+
+        <!-- Platinum Tier -->
+        <div class="tier-card">
+            <div class="tier-badge">PLATINUM</div>
+            <div class="tier-title">PLATINUM</div>
+            <div class="tier-price">$1,000+</div>
+            <div class="tier-perks">
+                <div class="perk-item">All Gold tier benefits</div>
+                <div class="perk-item">Title sponsor recognition</div>
+                <div class="perk-item">Exclusive logo placement</div>
+                <div class="perk-item">Custom challenge sponsorship</div>
+                <div class="perk-item">Keynote speaking slot</div>
+                <div class="perk-item">VIP event access</div>
+                <div class="perk-item">Custom package available</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>ADDITIONAL BENEFITS FOR ALL SPONSORS</h3>
+        <p>• Support student learning and local cybersecurity education</p>
+        <p>• Connect with motivated students and future professionals</p>
+        <p>• Demonstrate your commitment to community development</p>
+        <p>• Build brand awareness among tech-focused audiences</p>
+        <p>• Help make this inaugural event a success</p>
+    </div>
+
+    <div class="contact-box">
+        <h3>READY TO SPONSOR?</h3>
+        <p>Fill out our sponsorship registration form to get started.</p>
+        <a href="https://forms.google.com/your-form-link" class="contact-btn" target="_blank">REGISTER AS SPONSOR</a>
+        <p style="margin-top: 20px; font-size: 14px;">
+            Questions? Email: sponsors@indyctf.com
+        </p>
+    </div>
+</div>
+
+<script>
+    const codeEl = document.getElementById("code");
+    const lines = Array.from({ length: 40 }, () => "");
+    const chars = "01<>/\\|#%&@+=-[]{}*";
+
+    function updateLines() {
+        codeEl.innerHTML = "";
+        for (let i = 0; i < lines.length; i++) {
+            lines[i] += chars[Math.floor(Math.random() * chars.length)];
+            if (lines[i].length > 220)
+                lines[i] = lines[i].slice(1);
+
+            const div = document.createElement("div");
+            div.textContent = lines[i];
+            codeEl.appendChild(div);
+        }
+    }
+
+    setInterval(updateLines, 70);
+</script>
+
+</body>
+</html>
